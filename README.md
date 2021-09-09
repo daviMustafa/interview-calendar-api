@@ -62,18 +62,5 @@ To enable reuse of containers, you must set 'testcontainers.reuse.enable=true' i
     - Go to your project folder and run 'docker-compose config' to check for docker-compose file errors
     - Run docker-compose up --build
 
-## Using Intellij Http Request to test:
-
-
-    POST http://localhost:{port}/interview-calendar-api/interviewers
-    accept: application/json;charset=UTF-8
-    Content-Type: application/json;charset=UTF-8
-    
-    {
-        "firstName": "Teste",
-        "lastName": "Teste"
-    }
-
-    GET http://localhost:{port}/interview-calendar-api/interviewers
-    accept: application/json;charset=UTF-8
-    Content-Type: application/json;charset=UTF-8
+## Access SWAGGER:
+    - http://{host}:{port}/interview-calendar-api/swagger-ui/
