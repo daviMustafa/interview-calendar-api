@@ -15,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.temporal.TemporalQuery;
 import java.util.ArrayList;
 import java.util.List;

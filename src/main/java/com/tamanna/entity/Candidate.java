@@ -1,9 +1,7 @@
 package com.tamanna.entity;
 
 import com.tamanna.dto.AvailableCandidatePeriodDTO;
-import com.tamanna.dto.AvailableInterviewerPeriodDTO;
 import com.tamanna.dto.CandidateDTO;
-import com.tamanna.dto.InterviewerDTO;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;

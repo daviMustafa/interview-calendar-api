@@ -47,7 +47,7 @@
     And add this property:
     - testcontainers.reuse.enable=true
 
-To enable reuse of containers, you must set 'testcontainers.reuse.enable=true' in a file located at C:\Users\e-doliveira\.testcontainers.properties
+To enable reuse of test containers, you must set 'testcontainers.reuse.enable=true' in a file located at C:\Users\e-doliveira\.testcontainers.properties
 
 #### <h1> `DEV profile` </h1>
 ## In case you want to use only database container and run application in your IDE, remove `interview-calendar-api` service container from `docker-compose.yml` file.
