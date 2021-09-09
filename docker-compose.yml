@@ -1,0 +1,49 @@
+version: "3.3"
+
+networks:
+  host:
+
+services:
+  interview-calendar-api:
+    image: interview-calendar-api:1.0
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    expose:
+      - "8081"
+    depends_on:
+      - myapp-postgres
+    links:
+      - myapp-postgres
+    networks:
+      - host
+    hostname: localhost
+    environment:
+      - WAIT_HOSTS=myapp-postgres:5432
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    volumes:
+      # In case you run docker compose from IDE or windows host
+      - C:/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API:/developments/interview-calendar-api/logs:rw
+      - C:/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API/LogHistory:/developments/interview-calendar-api/logs/LogHistory:rw
+
+      # In case you run docker compose inside linux distro (ex: /mnt/c/Users/...)
+      # - //wsl$$/Debian/home/doliveira/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API:/developments/interview-calendar-api/logs:rw
+      # - //wsl$$/Debian/home/doliveira/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API/LogHistory:/developments/interview-calendar-api/logs/LogHistory:rw
+
+  myapp-postgres:
+    image: postgres:13.3
+    container_name: bd
+    environment:
+      - POSTGRES_DB=MyAppDb
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - 5432:5432
+    networks:
+      - host
+

@@ -1,0 +1,37 @@
+<configuration>
+	<property name="LOG_HOME" value="/developments/interview-calendar/logs" />
+	<property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n" />
+	<property name="ROLLING_FILE_FOLDER" value="LogHistory" />
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/interview-calendar-debug.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${ROLLING_FILE_FOLDER}/%d{yyyy-MM-dd,aux}/Debug/interview-calendar-db.%d{yyyy-MM-dd}_%i.log.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>30MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<maxHistory>7</maxHistory>
+			<cleanHistoryOnStart>true</cleanHistoryOnStart>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Configure so that it outputs to both console and log file -->
+	<root level="INFO">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="DEBUG"/>
+	</root>
+</configuration>
+
+
+
