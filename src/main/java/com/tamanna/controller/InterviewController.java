@@ -1,6 +1,7 @@
 package com.tamanna.controller;
 
 import com.tamanna.dto.AvailableInterviewerPeriodDTO;
+import com.tamanna.dto.InterviewDTO;
 import com.tamanna.service.InterviewService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.DayOfWeek;
 import java.util.List;
 
@@ -36,5 +35,13 @@ public class InterviewController {
         log.info("Listing availables periods of time for interview.");
         List<AvailableInterviewerPeriodDTO> result = service.getAvailablePeriodsOfTime(candidateId, interviewerIds, weekDays);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Save intervew.", response = InterviewDTO.class)
+    @PostMapping()
+    public ResponseEntity<?> saveInterview(@Valid @RequestBody InterviewDTO interviewDTO) throws Exception {
+        log.info("Save interview.");
+        InterviewDTO result = service.saveInterview(interviewDTO);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 }

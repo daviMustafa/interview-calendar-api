@@ -17,16 +17,16 @@ public class CandidateDTO implements Serializable {
 
     private static final long serialVersionUID = 7750438667352857749L;
 
-    @ApiModelProperty(readOnly = true)
-    public Long id;
+    @ApiModelProperty(hidden = true)
+    private Long id;
 
     @NotBlank(message = "Fist name required.")
     @ApiModelProperty(position = 1)
-    public String firstName;
+    private String firstName;
 
     @NotBlank(message = "Last name required.")
     @ApiModelProperty(position = 2)
-    public String lastName;
+    private String lastName;
 
     public CandidateDTO(String firstName, String lastName) {
         this.firstName = firstName;

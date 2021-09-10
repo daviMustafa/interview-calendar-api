@@ -17,7 +17,7 @@ public class CandidateTimeSlot {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "candidate_time_slot_generator")
     @SequenceGenerator(name = "candidate_time_slot_generator", sequenceName = "candidate_time_slot_id_seq", allocationSize = 1)
-    public Long id;
+    private Long id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

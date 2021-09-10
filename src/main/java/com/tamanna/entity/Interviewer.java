@@ -22,15 +22,15 @@ public class Interviewer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "interviewer_generator")
     @SequenceGenerator(name = "interviewer_generator", sequenceName = "interviewer_id_seq", allocationSize = 1)
-    public Long id;
+    private Long id;
 
     @NotNull
     @Column(name = "firstName", columnDefinition = "varchar(20)", unique = true)
-    public String firstName;
+    private String firstName;
 
     @NotNull
     @Column(name = "lastName", columnDefinition = "varchar(20)", unique = true)
-    public String lastName;
+    private String lastName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "interviewer", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Interview.class)
     private List<Interview> interviews;
@@ -58,10 +58,6 @@ public class Interviewer {
         return lastName;
     }
 
-    public List<InterviewerTimeSlot> getInterviewerTimeSlots() {
-        return interviewerTimeSlots;
-    }
-
     public List<AvailableInterviewerPeriodDTO> getInterviewerPeriodsList(TemporalQuery<Boolean> filterWeekDays) {
         List<AvailableInterviewerPeriodDTO> availableInterviewPeriodsDTO = new ArrayList<>();
 
@@ -77,8 +73,10 @@ public class Interviewer {
                                     LocalDateTime d = LocalDateTime.of(t, timePartStart);
                                     timePartStart = timePartStart.plusHours(1);
 
-                                    InterviewerDTO interviewerDTO = new InterviewerDTO(interviewerTimeSlot.getInterviewer().getFirstName(),
+                                    InterviewerDTO interviewerDTO = new InterviewerDTO(interviewerTimeSlot.getInterviewer().getId(),
+                                            interviewerTimeSlot.getInterviewer().getFirstName(),
                                             interviewerTimeSlot.getInterviewer().getLastName());
+
                                     availableInterviewPeriodsDTO.add(new AvailableInterviewerPeriodDTO(interviewerDTO, d));
                                 }
                             }));

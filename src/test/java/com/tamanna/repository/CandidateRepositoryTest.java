@@ -19,8 +19,8 @@ public class CandidateRepositoryTest extends AbstractContainerBaseTest {
         List<InterviewDTO> interviews = repository.getAllScheduledInterviewsByCandidateId(1L);
         assertEquals(1, interviews.size());
 
-        assertEquals("Debora", interviews.get(0).getInterviewer().getFirstName());
-        assertEquals("Davi", interviews.get(0).getCandidate().getFirstName());
+        assertEquals("Debora", interviews.get(0).getInterviewerFirstName());
+        assertEquals("Davi", interviews.get(0).getCandidateFirstName());
         assertEquals("2021-08-25T17:00", interviews.get(0).getStartDateTime().toString());
         assertEquals("2021-08-25T18:00", interviews.get(0).getEndDateTime().toString());
     }

@@ -1,6 +1,7 @@
 package com.tamanna.repository;
 
 import com.tamanna.dto.InterviewDTO;
+import com.tamanna.dto.InterviewerDTO;
 import com.tamanna.entity.Interviewer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,9 @@ public interface InterviewerRepository extends JpaRepository<Interviewer, Long> 
 
     @Query("SELECT DISTINCT i FROM Interviewer i JOIN FETCH i.interviewerTimeSlots WHERE i.id in :interviewerIds")
     List<Interviewer> findInterviewersTimeSlots(@Param("interviewerIds") List<Long> interviewerIds);
+
+    @Query("SELECT new com.tamanna.dto.InterviewerDTO(i.id, i.firstName, i.lastName)\n" +
+            "FROM Interviewer i")
+    List<InterviewerDTO> findAllInterviewers();
+
 }

@@ -1,7 +1,6 @@
 package com.tamanna.controller;
 
 import com.google.gson.Gson;
-import com.tamanna.dto.CandidateDTO;
 import com.tamanna.dto.InterviewDTO;
 import com.tamanna.dto.InterviewerDTO;
 import com.tamanna.entity.Interviewer;
@@ -63,17 +62,17 @@ public class InterviewerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].candidate.id", is(1)))
-                .andExpect(jsonPath("$[0].candidate.firstName", is("Davi")))
-                .andExpect(jsonPath("$[0].candidate.lastName", is("Mustafa")))
-                .andExpect(jsonPath("$[0].startDateTime", is("2021-08-25 17:00")))
-                .andExpect(jsonPath("$[0].endDateTime", is("2021-08-25 18:00")))
+                .andExpect(jsonPath("$[0].candidateId", is(1)))
+                .andExpect(jsonPath("$[0].candidateFirstName", is("Davi")))
+                .andExpect(jsonPath("$[0].candidateLastName", is("Mustafa")))
+                .andExpect(jsonPath("$[0].startDateTime", is("2021-08-25T17:00:00.000Z")))
+                .andExpect(jsonPath("$[0].endDateTime", is("2021-08-25T18:00:00.000Z")))
                 .andExpect(jsonPath("$[1].id", is(1)))
-                .andExpect(jsonPath("$[1].candidate.id", is(2)))
-                .andExpect(jsonPath("$[1].candidate.firstName", is("Carl")))
-                .andExpect(jsonPath("$[1].candidate.lastName", is("Silva")))
-                .andExpect(jsonPath("$[1].startDateTime", is("2021-08-26 17:00")))
-                .andExpect(jsonPath("$[1].endDateTime", is("2021-08-26 18:00")))
+                .andExpect(jsonPath("$[1].candidateId", is(2)))
+                .andExpect(jsonPath("$[1].candidateFirstName", is("Carl")))
+                .andExpect(jsonPath("$[1].candidateLastName", is("Silva")))
+                .andExpect(jsonPath("$[1].startDateTime", is("2021-08-26T17:00:00.000Z")))
+                .andExpect(jsonPath("$[1].endDateTime", is("2021-08-26T18:00:00.000Z")))
         ;
 
         verify(repository, times(1)).getAllScheduledInterviewsByInterviewerId(1L);
@@ -81,7 +80,7 @@ public class InterviewerControllerTest {
     }
 
     @Test
-    public void test_save_interviewer_return_200() throws Exception {
+    public void save_interviewer_return_200() throws Exception {
         InterviewerDTO interviewerDTO = new InterviewerDTO("Debora", "Silva");
         Interviewer interviewer = new Interviewer(interviewerDTO.getFirstName(), interviewerDTO.getLastName());
 
@@ -99,7 +98,7 @@ public class InterviewerControllerTest {
     }
 
     @Test
-    public void test_save_interviewer_return_400() throws Exception {
+    public void save_interviewer_return_400() throws Exception {
         InterviewerDTO interviewerDTO = new InterviewerDTO(null, null);
 
         String json = gson.toJson(interviewerDTO);
@@ -116,13 +115,17 @@ public class InterviewerControllerTest {
 
     private List<InterviewDTO> buildListInterviewDTO() {
         InterviewDTO firstInterview = InterviewDTO.builder().id(1L)
-                .candidate(new CandidateDTO(1L, "Davi", "Mustafa"))
+                .candidateId(1L)
+                .candidateFirstName("Davi")
+                .candidateLastName("Mustafa")
                 .startDateTime(LocalDateTime.of(2021, 8, 25, 17, 0, 0))
                 .endDateTime(LocalDateTime.of(2021, 8, 25, 18, 0, 0))
                 .build();
 
         InterviewDTO secondInterview = InterviewDTO.builder().id(1L)
-                .candidate(new CandidateDTO(2L, "Carl", "Silva"))
+                .candidateId(2L)
+                .candidateFirstName("Carl")
+                .candidateLastName("Silva")
                 .startDateTime(LocalDateTime.of(2021, 8, 26, 17, 0, 0))
                 .endDateTime(LocalDateTime.of(2021, 8, 26, 18, 0, 0))
                 .build();

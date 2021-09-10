@@ -22,15 +22,15 @@ public class Candidate {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "candidate_generator")
     @SequenceGenerator(name = "candidate_generator", sequenceName = "candidate_id_seq", allocationSize = 1)
-    public Long id;
+    private Long id;
 
     @NotNull
     @Column(name = "firstName", columnDefinition = "varchar(20)", unique = true)
-    public String firstName;
+    private String firstName;
 
     @NotNull
     @Column(name = "lastName", columnDefinition = "varchar(20)", unique = true)
-    public String lastName;
+    private String lastName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Interview.class)
     private List<Interview> interviews;
@@ -56,10 +56,6 @@ public class Candidate {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public List<CandidateTimeSlot> getCandidateTimeSlots() {
-        return candidateTimeSlots;
     }
 
     public List<AvailableCandidatePeriodDTO> getCandidatePeriodsList(TemporalQuery<Boolean> filterWeekDays) {

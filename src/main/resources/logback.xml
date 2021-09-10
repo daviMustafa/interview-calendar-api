@@ -1,5 +1,5 @@
 <configuration>
-	<property name="LOG_HOME" value="/developments/interview-calendar/logs" />
+	<property name="LOG_HOME" value="/developments/interview-calendar-api/logs" />
 	<property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n" />
 	<property name="ROLLING_FILE_FOLDER" value="LogHistory" />
 

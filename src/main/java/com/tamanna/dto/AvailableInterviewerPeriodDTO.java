@@ -5,24 +5,22 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 public class AvailableInterviewerPeriodDTO implements Serializable {
 
     private static final long serialVersionUID = -1398988798636344541L;
 
-    @ApiModelProperty(position = 1)
+    @ApiModelProperty(position = 1, hidden = true)
     private InterviewerDTO interviewer;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @ApiModelProperty(position = 2)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @ApiModelProperty(position = 2, hidden = true)
     private LocalDateTime date;
 
 }

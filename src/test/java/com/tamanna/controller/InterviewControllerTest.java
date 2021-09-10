@@ -1,6 +1,5 @@
 package com.tamanna.controller;
 
-import com.google.gson.Gson;
 import com.tamanna.dto.AvailableInterviewerPeriodDTO;
 import com.tamanna.dto.InterviewerDTO;
 import com.tamanna.service.InterviewService;
@@ -37,18 +36,15 @@ public class InterviewControllerTest {
     @Mock
     private InterviewService service;
 
-    private Gson gson;
-
     final String controllerEndpoint = "/interviews";
 
     @BeforeEach
     public void init() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        gson = new Gson();
     }
 
     @Test
-    public void should_retrieve_all_available_periods_of_time_given_candidates_and_interviewers() throws Exception {
+    public void should_retrieve_all_available_periods_of_time_given_candidates_interviewers_weekDays() throws Exception {
         List<AvailableInterviewerPeriodDTO> availableInterviewerPeriodDTOS = buildAvailableInterviewerPeriodDTOS();
 
         given(service.getAvailablePeriodsOfTime(anyLong(), anyList(), anyList())).willReturn(availableInterviewerPeriodDTOS);
@@ -62,10 +58,10 @@ public class InterviewControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].interviewer.firstName", is("Debora")))
                 .andExpect(jsonPath("$[0].interviewer.lastName", is("Silva")))
-                .andExpect(jsonPath("$[0].date", is("2021-08-25 17:00")))
+                .andExpect(jsonPath("$[0].date", is("2021-08-25T17:00:00.000Z")))
                 .andExpect(jsonPath("$[1].interviewer.firstName", is("Ingrid")))
                 .andExpect(jsonPath("$[1].interviewer.lastName", is("Martins")))
-                .andExpect(jsonPath("$[1].date", is("2021-08-26 17:00")))
+                .andExpect(jsonPath("$[1].date", is("2021-08-26T17:00:00.000Z")))
         ;
 
         verify(service, times(1)).getAvailablePeriodsOfTime(anyLong(), anyList(), anyList());
