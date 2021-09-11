@@ -68,7 +68,7 @@ public class Interviewer {
                                 LocalTime timePartEnd = interviewerTimeSlot.getTimeTo();
 
                                 //At this point consider hours in between? Remove plusHours(1) from while loop
-                                while (timePartStart.isBefore(timePartEnd)) {
+                                while (timePartStart.isBefore(timePartEnd.plusHours(1))) {
                                     LocalDateTime date = LocalDateTime.of(t, timePartStart);
                                     timePartStart = timePartStart.plusHours(1);
 

@@ -2,6 +2,8 @@ package com.tamanna.entity;
 
 import com.tamanna.entity.converters.LocalDateAttributeConverter;
 import com.tamanna.entity.converters.LocalTimeAttributeConverter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +14,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "candidate_time_slot", schema = "public",
         uniqueConstraints = @UniqueConstraint(columnNames = {"candidate_id", "dateFrom", "dateTo", "timeFrom", "timeTo"}))
+@Builder
+@AllArgsConstructor
 public class CandidateTimeSlot {
 
     @Id
@@ -39,6 +43,16 @@ public class CandidateTimeSlot {
     @Column(name = "timeTo", columnDefinition = "TIME")
     @Convert(converter = LocalTimeAttributeConverter.class)
     private LocalTime timeTo;
+
+    protected CandidateTimeSlot(){}
+
+    public CandidateTimeSlot(@NotNull Candidate candidate, @NotNull LocalDate dateFrom, @NotNull LocalDate dateTo, @NotNull LocalTime timeFrom, @NotNull LocalTime timeTo) {
+        this.candidate = candidate;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
+    }
 
     public Candidate getCandidate() {
         return candidate;

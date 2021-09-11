@@ -1,10 +1,9 @@
 package com.tamanna.controller;
 
-import com.google.gson.Gson;
 import com.tamanna.dto.CandidateDTO;
 import com.tamanna.dto.InterviewDTO;
-import com.tamanna.entity.Candidate;
-import com.tamanna.repository.CandidateRepository;
+import com.tamanna.dto.PeriodDTO;
+import com.tamanna.service.CandidateService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
@@ -38,23 +38,23 @@ public class CandidateControllerTest {
     private CandidateController controller;
 
     @Mock
-    private CandidateRepository repository;
+    private CandidateService service;
 
-    private Gson gson;
+    private ObjectMapper mapper;
 
     final String controllerEndpoint = "/candidates";
 
     @BeforeEach
     public void init() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        gson = new Gson();
+        mapper = new ObjectMapper();
     }
 
     @Test
     public void verify_fields_after_execute_get_candidates() throws Exception {
         List<CandidateDTO> candidateDTOS = buildListCandidatesDTO();
 
-        given(repository.findAllCandidates()).willReturn(candidateDTOS);
+        given(service.findAllCandidates()).willReturn(candidateDTOS);
 
         mockMvc.perform(MockMvcRequestBuilders.get(controllerEndpoint)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -68,15 +68,15 @@ public class CandidateControllerTest {
                 .andExpect(jsonPath("$[1].lastName", is("Silva")))
         ;
 
-        verify(repository, times(1)).findAllCandidates();
-        verifyNoMoreInteractions(repository);
+        verify(service, times(1)).findAllCandidates();
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void verify_fields_after_execute_get_interviews_by_candidate() throws Exception {
         List<InterviewDTO> interviewDTOS = buildListInterviewDTO();
 
-        given(repository.getAllScheduledInterviewsByCandidateId(1L)).willReturn(interviewDTOS);
+        given(service.getAllScheduledInterviewsByCandidateId(1L)).willReturn(interviewDTOS);
 
         mockMvc.perform(MockMvcRequestBuilders.get(controllerEndpoint + "/{id}/interviews", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -96,17 +96,17 @@ public class CandidateControllerTest {
                 .andExpect(jsonPath("$[1].endDateTime", is("2021-08-26T18:00:00.000Z")))
         ;
 
-        verify(repository, times(1)).getAllScheduledInterviewsByCandidateId(1L);
-        verifyNoMoreInteractions(repository);
+        verify(service, times(1)).getAllScheduledInterviewsByCandidateId(1L);
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void test_save_candidate_return_200() throws Exception {
         CandidateDTO candidateDTO = new CandidateDTO("Davi", "Mustafa");
-        Candidate candidate = new Candidate(candidateDTO.getFirstName(), candidateDTO.getLastName());
 
-        String json = gson.toJson(candidateDTO);
-        when(repository.save(any(Candidate.class))).thenReturn(candidate);
+        String json = mapper.writeValueAsString(candidateDTO);
+
+        doNothing().when(service).save(any(CandidateDTO.class));
 
         this.mockMvc.perform(post(controllerEndpoint)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -114,15 +114,15 @@ public class CandidateControllerTest {
                         .content(json))
                 .andExpect(status().isCreated());
 
-        verify(repository, times(1)).save(any(Candidate.class));
-        verifyNoMoreInteractions(repository);
+        verify(service, times(1)).save(any(CandidateDTO.class));
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void test_save_candidate_return_400() throws Exception {
         CandidateDTO candidateDTO = new CandidateDTO(null, null);
 
-        String json = gson.toJson(candidateDTO);
+        String json = mapper.writeValueAsString(candidateDTO);
 
         this.mockMvc.perform(post(controllerEndpoint)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -130,15 +130,15 @@ public class CandidateControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest());
 
-        verify(repository, times(0)).save(any(Candidate.class));
-        verifyNoMoreInteractions(repository);
+        verify(service, times(0)).save(any(CandidateDTO.class));
+        verifyNoMoreInteractions(service);
     }
 
     @Test
     public void test_save_candidate_return_415() throws Exception {
         CandidateDTO candidateDTO = new CandidateDTO("Davi", "Mustafa");
 
-        String json = gson.toJson(candidateDTO);
+        String json = mapper.writeValueAsString(candidateDTO);
 
         this.mockMvc.perform(post(controllerEndpoint)
                         .contentType(MediaType.APPLICATION_XML)
@@ -146,11 +146,27 @@ public class CandidateControllerTest {
                         .content(json))
                 .andExpect(status().isUnsupportedMediaType());
 
-        verify(repository, times(0)).save(any(Candidate.class));
-        verifyNoMoreInteractions(repository);
+        verify(service, times(0)).save(any(CandidateDTO.class));
+        verifyNoMoreInteractions(service);
     }
 
-    private List<CandidateDTO> buildListCandidatesDTO(){
+    @Test
+    public void test_save_candidate_available_period_return_400() throws Exception {
+        PeriodDTO periodDTO = new PeriodDTO(null, null);
+
+        String json = mapper.writeValueAsString(periodDTO);
+
+        this.mockMvc.perform(post(controllerEndpoint + "/{id}/period", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(String.valueOf(Charset.defaultCharset()))
+                        .content(json))
+                .andExpect(status().isBadRequest());
+
+        verify(service, times(0)).saveAvailablePeriod(anyLong(), any(PeriodDTO.class));
+        verifyNoMoreInteractions(service);
+    }
+
+    private List<CandidateDTO> buildListCandidatesDTO() {
         CandidateDTO firstCandidate = CandidateDTO.builder().id(1L)
                 .firstName("Davi").lastName("Mustafa").build();
 

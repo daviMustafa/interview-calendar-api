@@ -16,7 +16,7 @@ public class AvailableCandidatePeriodDTO implements Serializable {
 
     private static final long serialVersionUID = -1398988798636344541L;
 
-    @ApiModelProperty
+    @ApiModelProperty(hidden = true)
     private Long id;
 
     @ApiModelProperty(position = 1, hidden = true)

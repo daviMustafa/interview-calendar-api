@@ -2,8 +2,8 @@ package com.tamanna.controller;
 
 import com.tamanna.dto.CandidateDTO;
 import com.tamanna.dto.InterviewDTO;
-import com.tamanna.entity.Candidate;
-import com.tamanna.repository.CandidateRepository;
+import com.tamanna.dto.PeriodDTO;
+import com.tamanna.service.CandidateService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,36 +20,43 @@ import java.util.List;
 @RequestMapping(value = "/candidates", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CandidateController {
 
-    //There was no need to create service at this point of the test. Only to test a controller and check
-    //how many times this repository was called and its result
-    private final CandidateRepository repository;
+    private final CandidateService service;
 
     @Autowired
-    public CandidateController(CandidateRepository repository) {
-        this.repository = repository;
+    public CandidateController(CandidateService service) {
+        this.service = service;
     }
 
     @ApiOperation(value = "Get all candidates", response = CandidateDTO.class, responseContainer = "List")
     @GetMapping()
-    public ResponseEntity<?> getAllCandidates(){
+    public ResponseEntity<?> getAllCandidates() {
         log.info("Listing all candidates.");
-        List<CandidateDTO> result = repository.findAllCandidates();
+        List<CandidateDTO> result = service.findAllCandidates();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get scheduled interviews given candidate id.", response = InterviewDTO.class, responseContainer = "List")
     @GetMapping(value = "/{id}/interviews")
-    public ResponseEntity<?> getAllScheduledInterviewsByCandidateId(@PathVariable("id") Long id){
+    public ResponseEntity<?> getAllScheduledInterviewsByCandidateId(@PathVariable("id") Long id) {
         log.info("Listing all interviews from a candidate.");
-        List<InterviewDTO> result = repository.getAllScheduledInterviewsByCandidateId(id);
+        List<InterviewDTO> result = service.getAllScheduledInterviewsByCandidateId(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Save candidate.")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> save(@Valid @RequestBody CandidateDTO candidate){
+    public ResponseEntity<?> save(@Valid @RequestBody CandidateDTO candidate) {
         log.info("Saving candidate.");
-        repository.save(new Candidate(candidate.getFirstName(), candidate.getLastName()));
+        service.save(candidate);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Save candidate available period.")
+    @PostMapping(value = "/{id}/period", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveAvailablePeriod(@PathVariable("id") Long id,
+                                                 @Valid @RequestBody PeriodDTO periodDTO) {
+        log.info("Saving candidate available period.");
+        service.saveAvailablePeriod(id, periodDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

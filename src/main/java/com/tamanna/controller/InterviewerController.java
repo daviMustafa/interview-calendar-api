@@ -2,8 +2,8 @@ package com.tamanna.controller;
 
 import com.tamanna.dto.InterviewDTO;
 import com.tamanna.dto.InterviewerDTO;
-import com.tamanna.entity.Interviewer;
-import com.tamanna.repository.InterviewerRepository;
+import com.tamanna.dto.PeriodDTO;
+import com.tamanna.service.InterviewerService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +20,18 @@ import java.util.List;
 @RequestMapping(value = "/interviewers", produces = MediaType.APPLICATION_JSON_VALUE)
 public class InterviewerController {
 
-    //There was no need to create service at this point of the test. Only to test a controller and check
-    //how many times this repository was called and its result
-    private final InterviewerRepository repository;
+    private final InterviewerService service;
 
     @Autowired
-    public InterviewerController(InterviewerRepository repository) {
-        this.repository = repository;
+    public InterviewerController(InterviewerService service) {
+        this.service = service;
     }
 
     @ApiOperation(value = "Get all interviewers", response = InterviewerDTO.class, responseContainer = "List")
     @GetMapping()
     public ResponseEntity<?> getAllInterviewers(){
         log.info("Listing all interviewers.");
-        List<InterviewerDTO> result = repository.findAllInterviewers();
+        List<InterviewerDTO> result = service.findAllInterviewers();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -41,7 +39,7 @@ public class InterviewerController {
     @GetMapping(value = "/{id}/interviews")
     public ResponseEntity<?> getAllScheduledInterviewsByInterviewerId(@PathVariable("id") Long id){
         log.info("Listing all interviews from a interviewer.");
-        List<InterviewDTO> result = repository.getAllScheduledInterviewsByInterviewerId(id);
+        List<InterviewDTO> result = service.getAllScheduledInterviewsByInterviewerId(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -49,7 +47,16 @@ public class InterviewerController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> save(@Valid @RequestBody InterviewerDTO interviewer){
         log.info("Saving interviewer.");
-        repository.save(new Interviewer(interviewer.getFirstName(), interviewer.getLastName()));
+        service.save(interviewer);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Save interviewer available period.")
+    @PostMapping(value = "/{id}/period", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> saveAvailablePeriod(@PathVariable("id") Long id,
+                                                 @Valid @RequestBody PeriodDTO periodDTO) {
+        log.info("Saving interviewer available period.");
+        service.saveAvailablePeriod(id, periodDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
