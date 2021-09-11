@@ -82,7 +82,7 @@ public class InterviewServiceImpl implements InterviewService {
                 Collections.singletonList(interviewDTO.getStartDateTime().getDayOfWeek()));
 
         boolean dateAvailable = availablePeriodsOfTime.stream().distinct().anyMatch(i -> i.getDate().equals(interviewDTO.getStartDateTime())
-                && i.getInterviewer().getId().equals(interviewDTO.getInterviewerId()));
+                && i.getId().equals(interviewDTO.getInterviewerId()));
 
         if(dateAvailable){
             Candidate candidate = candidateRepository.getOne(interviewDTO.getCandidateId());

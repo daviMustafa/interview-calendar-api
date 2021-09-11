@@ -16,11 +16,17 @@ public class AvailableCandidatePeriodDTO implements Serializable {
 
     private static final long serialVersionUID = -1398988798636344541L;
 
+    @ApiModelProperty
+    private Long id;
+
     @ApiModelProperty(position = 1, hidden = true)
-    private CandidateDTO candidate;
+    private String firstName;
+
+    @ApiModelProperty(position = 2, hidden = true)
+    private String lastName;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    @ApiModelProperty(position = 2, hidden = true)
+    @ApiModelProperty(position = 2)
     private LocalDateTime date;
 
 }

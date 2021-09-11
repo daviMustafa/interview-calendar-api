@@ -1,7 +1,6 @@
 package com.tamanna.entity;
 
 import com.tamanna.dto.AvailableInterviewerPeriodDTO;
-import com.tamanna.dto.InterviewerDTO;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -70,14 +69,12 @@ public class Interviewer {
 
                                 //At this point consider hours in between? Remove plusHours(1) from while loop
                                 while (timePartStart.isBefore(timePartEnd)) {
-                                    LocalDateTime d = LocalDateTime.of(t, timePartStart);
+                                    LocalDateTime date = LocalDateTime.of(t, timePartStart);
                                     timePartStart = timePartStart.plusHours(1);
 
-                                    InterviewerDTO interviewerDTO = new InterviewerDTO(interviewerTimeSlot.getInterviewer().getId(),
-                                            interviewerTimeSlot.getInterviewer().getFirstName(),
-                                            interviewerTimeSlot.getInterviewer().getLastName());
-
-                                    availableInterviewPeriodsDTO.add(new AvailableInterviewerPeriodDTO(interviewerDTO, d));
+                                    availableInterviewPeriodsDTO.add(new AvailableInterviewerPeriodDTO(interviewerTimeSlot.getInterviewer().getId(),
+                                            interviewerTimeSlot.getInterviewer().getFirstName(), interviewerTimeSlot.getInterviewer().getLastName(),
+                                            date));
                                 }
                             }));
         }

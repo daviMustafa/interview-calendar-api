@@ -1,7 +1,6 @@
 package com.tamanna.entity;
 
 import com.tamanna.dto.AvailableCandidatePeriodDTO;
-import com.tamanna.dto.CandidateDTO;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -61,7 +60,7 @@ public class Candidate {
     public List<AvailableCandidatePeriodDTO> getCandidatePeriodsList(TemporalQuery<Boolean> filterWeekDays) {
         List<AvailableCandidatePeriodDTO> availableCandidatePeriodsDTO = new ArrayList<>();
 
-        if(!CollectionUtils.isEmpty(candidateTimeSlots)) {
+        if (!CollectionUtils.isEmpty(candidateTimeSlots)) {
             candidateTimeSlots.forEach(candidateTimeSlot ->
                     candidateTimeSlot.getDateFrom().datesUntil(candidateTimeSlot.getDateTo().plusDays(1)).collect(Collectors.toList())
                             .stream().filter(date -> date.query(filterWeekDays))
@@ -71,12 +70,12 @@ public class Candidate {
 
                                 //At this point consider hours in between? Remove plusHours(1) from while loop
                                 while (timePartStart.isBefore(timePartEnd.plusHours(1))) {
-                                    LocalDateTime d = LocalDateTime.of(t, timePartStart);
+                                    LocalDateTime date = LocalDateTime.of(t, timePartStart);
                                     timePartStart = timePartStart.plusHours(1);
 
-                                    CandidateDTO candidateDTO = new CandidateDTO(candidateTimeSlot.getCandidate().getFirstName(),
-                                            candidateTimeSlot.getCandidate().getLastName());
-                                    availableCandidatePeriodsDTO.add(new AvailableCandidatePeriodDTO(candidateDTO, d));
+                                    availableCandidatePeriodsDTO.add(new AvailableCandidatePeriodDTO(candidateTimeSlot.getCandidate().getId(),
+                                            candidateTimeSlot.getCandidate().getFirstName(), candidateTimeSlot.getCandidate().getLastName(),
+                                            date));
                                 }
                             }));
         }
