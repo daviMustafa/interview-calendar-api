@@ -26,14 +26,14 @@ services:
       - WAIT_HOSTS_TIMEOUT=300
       - WAIT_SLEEP_INTERVAL=30
       - WAIT_HOST_CONNECT_TIMEOUT=30
-    volumes:
-      # In case you run docker compose from IDE or windows host
-#      - C:/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API:/developments/interview-calendar-api/logs:rw
-#      - C:/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API/LogHistory:/developments/interview-calendar-api/logs/LogHistory:rw
-
-      # In case you run docker compose inside linux distro (ex: /mnt/c/Users/...)
-       - //home/doliveira/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API:/developments/interview-calendar-api/logs:rw
-       - //home/doliveira/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API/LogHistory:/developments/interview-calendar-api/logs/LogHistory:rw
+#    volumes:
+#      # In case you run docker compose from IDE or windows host
+##      - C:/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API:/developments/interview-calendar-api/logs:rw
+##      - C:/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API/LogHistory:/developments/interview-calendar-api/logs/LogHistory:rw
+#
+#      # In case you run docker compose inside linux distro (ex: /mnt/c/Users/...)
+#       - //home/doliveira/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API:/developments/interview-calendar-api/logs:rw
+#       - //home/doliveira/SPRING_BOOT/LOGS/INTERVIEW-CALENDAR-API/LogHistory:/developments/interview-calendar-api/logs/LogHistory:rw
 
   myapp-postgres:
     image: postgres:13.3
